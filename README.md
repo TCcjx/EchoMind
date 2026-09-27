@@ -98,6 +98,11 @@ npm run dev               # http://localhost:5173，/api 代理到 localhost:800
 # 后端端口不是 8000 时：API_PROXY_TARGET=http://localhost:9000 npm run dev
 ```
 
+> 若 `npm install` 后 `npm run build` 报 `Cannot find module '@rollup/rollup-win32-x64-msvc'`，是 npm 漏装了 rollup 的平台原生包（`node_modules/@rollup/` 会是空的）。显式补装即可，版本号与本机 rollup 保持一致：
+> ```bash
+> npm install @rollup/rollup-win32-x64-msvc@<rollup 版本> --no-save
+> ```
+
 ## 文档导航
 
 | 文档 | 内容 |
