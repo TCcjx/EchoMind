@@ -8,9 +8,12 @@ EchoMind 是面向客服/运营场景的多 Agent 系统。输入一条用户消
 
 | 路径 | 用途 | 学习优先级 |
 | --- | --- | --- |
+| `README.md` | 仓库总入口：目录结构、两种部署方式、核心链路、文档导航 | 先看 |
 | `EchoMind/` | Python/FastAPI 实现、`wiki/` 文档与测试 | 最高 |
 | `EchoMindFrontend/` | Vue 调试界面，对接 Python 后端 | 演示时了解 |
 | `文档+简历/` | `EchoMind/wiki/` 的副本，便于单独分发 | 参考，不替代代码 |
+
+三个目录同属一个 git 仓库。仓库只纳入源码：`node_modules/`、`dist/`、`.venv/`、`.idea/` 等环境与产物目录不入库，克隆后按 README 重建即可（前端 `npm install`，后端 `pip install -r requirements-dev.txt`）。
 
 历史版本曾用 Java/Spring Boot 实现过一套对照代码，现已从本仓库移除，不再维护。投 Java 岗时不要按“双语言实现”来讲，可以讲 Python 版的架构思路，或说明自己复现和改造了哪些模块。
 
@@ -37,15 +40,32 @@ EchoMind 是面向客服/运营场景的多 Agent 系统。输入一条用户消
 ```text
 ChatRequest
   → MemoryManager.get_context
-  → IntentRecognizer
-  → AgentOrchestrator.run（Agent 在循环内自行决定是否调用检索工具）
-  → 写入会话消息、更新画像
+  → IntentRecognizer（规则 / 本地向量 / LLM 三路融合）
+  → 按意图决定是否预检索知识库（_build_knowledge_context，寒暄类直接跳过）
+  → AgentOrchestrator.run（Agent 在工具循环内仍可自主调用检索）
+  → 写入会话消息、异步更新画像
   → ChatResponse
 ```
 
 记录每步的输入、输出、失败时行为和耗时来源。尤其要分清 `intent`、`intent_group`、`agent_type`、`primary_agent`、`supporting_agents`、`routing_reason` 的含义。接口全部返回 snake_case，前端在 `EchoMindFrontend/src/lib/api.js` 中转成页面使用的字段名。
 
-注意：`main.py` 里的 `_build_knowledge_context` / `_should_use_knowledge` 目前没有调用方，README 流程图中“按意图决定知识检索”这一环并不在 `/chat` 主链路上，检索由 Agent 在工具循环中自主发起。这是一个很好的面试切入点：说明你发现了文档与代码的差异，以及打算怎么修。
+两个容易讲错的字段，务必先实测再讲：
+
+- `latency_ms` 是**端到端耗时**（从进入 `/chat` 到返回，含记忆读取、意图识别、知识检索和编排），不是编排器内部耗时。
+- `knowledge_used` 为 `true` 表示「主链路预注入命中」**或**「Agent 自主调用过检索工具」，两种情况都算。
+
+### 3.1.1 已修复缺陷：很好的面试素材
+
+这个项目此前做过一轮完整性审计，修掉的问题本身就是优质素材——前提是你要讲得清**怎么发现、怎么改、怎么验证**（发现手段通常是：拿文档声明去对接口输出，对不上就追源码）：
+
+| 缺陷 | 症状 | 改法 |
+| --- | --- | --- |
+| 主链路 RAG 未接入 | `_build_knowledge_context` 定义了却从未被调用，`/chat` 实际不走意图驱动的检索预注入，`knowledge_used` 恒为 false | 在 `chat()` 中调用并拼入上下文 |
+| 耗时统计失真 | `latency_ms` 只统计编排器内部耗时，实测端到端 16 秒却记录 0.5 毫秒 | 在 `/chat` 入口打点，改为覆盖全链路 |
+| 后台任务可被 GC | 画像更新等 fire-and-forget 任务没有持引用，可能被中途取消 | 用集合持有强引用 + `add_done_callback` 自动移除 |
+| 评测基线被覆盖 | `/eval/run` 每次运行都无条件覆盖 baseline | 改为默认不写，需显式传 `save_baseline: true`，写入前自动 `.bak` |
+
+不要只背结论。面试官更想听你怎么验证的——比如用 `curl` 实测端到端耗时，与接口返回的 `latency_ms` 对比，才发现差了三个数量级。
 
 ### 3.2 核心模块阅读清单
 
@@ -58,7 +78,7 @@ ChatRequest
 | 业务规则怎样热更新？ | `core/skill_loader.py`、`skills/*/SKILL.md` |
 | 如何监控与评估？ | `monitor/performance_monitor.py`、`evaluation/evaluator.py` |
 
-存储分工：Redis 保存工作记忆（`wm:{user}:{conv}`，TTL 86400s）与会话摘要；ChromaDB 保存知识库、情景记忆与用户画像。意图识别的第二路“向量相似度”实际是本地 md5 字符 n-gram 哈希向量（`intent_recognizer.py:424`），不是语义 Embedding——`anthropic` SDK 不提供 embeddings 接口，所以远程分支永远不生效。讲述时必须说清楚，否则会被追问到答不上来。
+存储分工：Redis 保存工作记忆（`wm:{user}:{conv}`，TTL 86400s）与会话摘要；ChromaDB 保存知识库、情景记忆与用户画像。意图识别的第二路“向量相似度”实际是本地字符 n-gram 哈希向量（`core/intent_recognizer.py` 的 `_local_embedding`），不是语义 Embedding——`anthropic` SDK 不提供 embeddings 接口，所以远程分支永远不生效。讲述时必须说清楚，否则会被追问到答不上来。另外三路融合的权重是 `llm 0.7 / embedding 0.2 / pattern 0.1`；代码里还有一个 `llm 0.85 / pattern 0.15` 的两路分支，但开关 `_embedding_enabled` 在 `IntentRecognizer.__init__` 中硬编码为 `True`，**该分支目前不可达**。远端 embedding 调用失败时走的是本地向量兜底，权重不变。能说出这种细节，说明你读的是实现而不是文档。
 
 ## 4. 必须亲手完成的演示
 
@@ -69,7 +89,7 @@ ChatRequest
 5. 用“登录报 401，同时订单重复扣款”测试复合问题；查看主辅 Agent、路由原因，并用响应里的 `request_id` 调 `GET /trace/tool/{request_id}` 看工具追踪。
 6. 调用 `GET /monitor`；若评测环境和模型额度允许，再运行 `POST /eval/run` 并保存输出。
 7. 故意制造一次知识库或模型不可用场景，观察错误、fallback、转人工和监控表现。不要凭文档推断降级一定成功。
-8. 在 `EchoMind/` 下运行 `pip install -r requirements-dev.txt && pytest tests/ -v`。这六份测试用假 LLM 客户端、假 Redis 和假 ChromaDB collection，不需要 API Key 和外部服务，锁定的是七个已修复缺陷：成功路径的 `tool_traces` 曾恒为空、意图识别 prompt 曾没插入 few-shot 示例、知识库重复导入曾因 `add()` 抛重复 ID 而整批失败、工具降级曾被当成调用成功、跨子查询召回去重曾被 `score` 破坏、中文 Windows（GBK）控制台曾因 BANNER 里的 `ʕ•ᴥ•ʔ` 在启动时就崩、Redis 未启动时 `/chat` 曾因记忆读写裸调用直接 500。没装 ChromaDB 时 `test_knowledge_base.py`、`test_conversation_memory.py` 会跳过。
+8. 在 `EchoMind/` 下运行 `pip install -r requirements-dev.txt && pytest tests/ -v`。这六份测试用假 LLM 客户端、假 Redis 和假 ChromaDB collection，不需要 API Key 和外部服务，锁定的是七个已修复缺陷（另有四个未被测试覆盖的修复见 3.1.1）：成功路径的 `tool_traces` 曾恒为空、意图识别 prompt 曾没插入 few-shot 示例、知识库重复导入曾因 `add()` 抛重复 ID 而整批失败、工具降级曾被当成调用成功、跨子查询召回去重曾被 `score` 破坏、中文 Windows（GBK）控制台曾因 BANNER 里的 `ʕ•ᴥ•ʔ` 在启动时就崩、Redis 未启动时 `/chat` 曾因记忆读写裸调用直接 500。没装 ChromaDB 时 `test_knowledge_base.py`、`test_conversation_memory.py` 会跳过。
 9. 复现一次降级：只启动 API 而不起 `docker compose` 里的 redis，连续调用 `POST /chat`，确认服务仍然回答、日志里出现“写入工作记忆失败/读取工作记忆失败”而不是 500。这条要亲手跑，别只读代码。
 
 留存一份个人实验记录：运行日期、Git 版本、配置方式（密钥打码）、输入、响应、耗时、指标和结论。没有这份记录，不要在简历里写提升百分比、命中率或吞吐量。
@@ -88,7 +108,7 @@ ChatRequest
 2. **核心链路**：从 `/chat` 依次讲记忆、意图、路由、Agent 工具循环、生成和写回，并展示响应里的可观测字段。
 3. **最重要的设计取舍**：复合问题为何需要主辅 Agent；工具失败为何要有缓存、超时、熔断和 fallback；意图识别为何要规则、向量、模型三路融合而不是只调一次 LLM。
 4. **验证证据**：展示自己跑出的请求、测试或评测结果，同时说明样本规模和边界。
-5. **不足与改进**：管理接口鉴权、默认部署凭据、RAG 触发链路和路由降权的有效性都仍需加强；回归测试目前覆盖编排、意图识别 prompt、知识库导入、工具降级与去重、记忆层 Redis 容错和启动期编码，监控和评测仍靠手工验证。
+5. **不足与改进**：管理接口鉴权、默认部署凭据和路由降权的有效性仍需加强（每种 Agent 只有一个实例，降权不会改变选择结果）；回归测试目前覆盖编排、意图识别 prompt、知识库导入、工具降级与去重、记忆层 Redis 容错和启动期编码，监控和评测仍靠手工验证。
 
 面试官问“你具体做了什么”时，只讲自己实际编写、修改、测试或深入复现的部分；拿到的完整项目代码不能直接表述为个人从零独立开发。
 
