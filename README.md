@@ -24,7 +24,7 @@
 
 一条用户消息进来，走完 **记忆读取 → 意图识别 → 知识检索（RAG）→ Agent 路由与协作 → 回复生成 → 记忆写回 → 监控采集** 的完整闭环。不是聊天机器人 Demo，而是一个**可观测、可评测、可降级**的多 Agent 运行时。
 
-> 本仓库同时是一个**求职展示项目**：[`EchoMind求职项目学习指南.md`](EchoMind求职项目学习指南.md) 提供了按请求链路读代码的 7 天学习路径，以及面试时容易讲错的字段口径。
+> [`EchoMind学习指南.md`](EchoMind学习指南.md) 提供了按请求链路读代码的 7 天学习路径，以及两个容易理解错的字段口径（`latency_ms`、`knowledge_used`）。
 
 ## 核心能力
 
@@ -132,7 +132,7 @@ npm run dev               # http://localhost:5173，/api 代理到 localhost:800
 ## 仓库结构
 
 ```
-EchoMind-多Agent客服求职项目/
+EchoMind/
 ├── assets/                     # 本 README 使用的配图（深色主题）
 ├── EchoMind/                   # 后端：多 Agent 编排、意图识别、RAG、记忆、监控、评测
 │   ├── api/main.py             #   FastAPI 入口，所有接口在此收口
@@ -147,16 +147,14 @@ EchoMind-多Agent客服求职项目/
 │   └── wiki/                   #   全套技术文档 + 架构图
 ├── EchoMindFrontend/           # 前端：Vue 3 + Vite 调试界面（4 个源文件）
 │   └── src/                    #   App.vue / lib/api.js / styles.css / main.js
-├── 文档+简历/                   # wiki 的可分发副本 + SVG 架构图/海报（求职材料）
-└── EchoMind求职项目学习指南.md   # 7 天读码路径 + 简历写法
+└── EchoMind学习指南.md           # 按请求链路读代码的 7 天路径
 ```
 
 | 目录 | 内容 | 定位 |
 |---|---|---|
 | `EchoMind/` | Python/FastAPI 后端 | 核心实现 |
 | `EchoMindFrontend/` | Vue 3 + Vite 调试界面：聊天、知识库管理、Skills 热加载、评测、Trace 查看 | 演示界面 |
-| `文档+简历/` | `EchoMind/wiki/` 的可分发副本 + SVG 架构图/海报 | 求职材料，不替代代码 |
-| `EchoMind求职项目学习指南.md` | 面向求职者的代码学习路径与简历写法指南 | 学习入口 |
+| `EchoMind学习指南.md` | 按请求链路读代码的 7 天学习路径 | 学习入口 |
 
 ## 文档导航
 
@@ -164,12 +162,12 @@ EchoMind-多Agent客服求职项目/
 |---|---|
 | [`EchoMind/README.md`](EchoMind/README.md) | 后端详解：架构、接口、运行时组件 |
 | [`EchoMindFrontend/README.md`](EchoMindFrontend/README.md) | 前端详解：三种部署模式下 `/api` 的指向 |
-| [`EchoMind/wiki/技术亮点.md`](EchoMind/wiki/技术亮点.md) | 面试讲法：关键技术点 |
+| [`EchoMind/wiki/技术亮点.md`](EchoMind/wiki/技术亮点.md) | 关键技术点与设计动机 |
 | [`EchoMind/wiki/重点代码.md`](EchoMind/wiki/重点代码.md) | 逐模块代码导读 |
 | [`EchoMind/wiki/业务流程说明.md`](EchoMind/wiki/业务流程说明.md) | 业务视角的流程说明 |
 | [`EchoMind/wiki/完整使用指南.md`](EchoMind/wiki/完整使用指南.md) | 全功能操作手册 |
 | [`EchoMind/2026.08.29改动说明.md`](EchoMind/2026.08.29改动说明.md) | 多 Agent 编排重构记录 |
-| [`EchoMind求职项目学习指南.md`](EchoMind求职项目学习指南.md) | 7 天学习路径 + 简历写法 |
+| [`EchoMind学习指南.md`](EchoMind学习指南.md) | 7 天读码路径 |
 
 <details>
 <summary><b>架构图集（6 张，展开查看）</b></summary>
@@ -192,7 +190,7 @@ EchoMind-多Agent客服求职项目/
 
 ## 注意事项（跨机移植）
 
-- **整个目录是一个统一的 git 仓库**（2026-09-28 起）。原先 `EchoMind/` 与 `EchoMindFrontend/` 各自独立的仓库已合并，`README.md`、`EchoMind求职项目学习指南.md`、`文档+简历/` 现在都在同一个版本库内。当前无 remote，要推送执行 `git remote add origin <你的仓库地址>`。
+- **整个目录是一个统一的 git 仓库**（2026-09-28 起）。原先 `EchoMind/` 与 `EchoMindFrontend/` 各自独立的仓库已合并，`README.md`、`EchoMind学习指南.md` 现在都在同一个版本库内。当前无 remote，要推送执行 `git remote add origin <你的仓库地址>`。
 - **历史备份**：子仓库合并前的 `.git` 备份在 `D:/git_repository/_EchoMind_subgit_backup_20260928/`；再早的原作者提交历史备份在 `D:/git_repository/_EchoMind_git_backup_20260927/`。确认无用后可删。
 - **本机环境需重建**：`node_modules`、`dist`、`.idea`、`.venv` 等环境/产物文件已清理，未纳入版本库。按上文「本地开发」重建即可（`npm install` / `pip install -r requirements-dev.txt`）。原作者的 macOS 残留环境（`darwin-arm64` 版 `node_modules`、`.DS_Store`）已于 2026-09-27 清理。
 - **已知限制**：管理接口无鉴权；Redis 默认密码 `echomind123` 为演示值，公网部署请修改 `.env` 中的 `REDIS_PASSWORD`；`chromadb` 在 Windows 上无预编译 wheel（Docker 内不受影响）；两套 compose 不可同时启动。
