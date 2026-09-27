@@ -149,8 +149,7 @@ EchoMind-多Agent客服求职项目/
 ├── EchoMindFrontend/           # 前端：Vue 3 + Vite 调试界面（4 个源文件）
 │   └── src/                    #   App.vue / lib/api.js / styles.css / main.js
 ├── 文档+简历/                   # wiki 的可分发副本 + SVG 架构图/海报（求职材料）
-├── EchoMind求职项目学习指南.md   # 7 天读码路径 + 简历写法
-└── 项目审计报告.html            # 完整性与缺陷修复审计记录
+└── EchoMind求职项目学习指南.md   # 7 天读码路径 + 简历写法
 ```
 
 | 目录 | 内容 | 定位 |
@@ -172,7 +171,6 @@ EchoMind-多Agent客服求职项目/
 | [`EchoMind/wiki/完整使用指南.md`](EchoMind/wiki/完整使用指南.md) | 全功能操作手册 |
 | [`EchoMind/2026.08.29改动说明.md`](EchoMind/2026.08.29改动说明.md) | 多 Agent 编排重构记录 |
 | [`EchoMind求职项目学习指南.md`](EchoMind求职项目学习指南.md) | 7 天学习路径 + 简历写法 |
-| [`项目审计报告.html`](项目审计报告.html) | 完整性核查 + 11 项缺陷修复记录 |
 
 <details>
 <summary><b>架构图集（6 张，展开查看）</b></summary>
@@ -198,7 +196,7 @@ EchoMind-多Agent客服求职项目/
 - **整个目录是一个统一的 git 仓库**（2026-09-28 起）。原先 `EchoMind/` 与 `EchoMindFrontend/` 各自独立的仓库已合并，`README.md`、`EchoMind求职项目学习指南.md`、`文档+简历/` 现在都在同一个版本库内。当前无 remote，要推送执行 `git remote add origin <你的仓库地址>`。
 - **历史备份**：子仓库合并前的 `.git` 备份在 `D:/git_repository/_EchoMind_subgit_backup_20260928/`；再早的原作者提交历史备份在 `D:/git_repository/_EchoMind_git_backup_20260927/`。确认无用后可删。
 - **本机环境需重建**：`node_modules`、`dist`、`.idea`、`.venv` 等环境/产物文件已清理，未纳入版本库。按上文「本地开发」重建即可（`npm install` / `pip install -r requirements-dev.txt`）。原作者的 macOS 残留环境（`darwin-arm64` 版 `node_modules`、`.DS_Store`）已于 2026-09-27 清理。
-- **已知限制**（详见 [`项目审计报告.html`](项目审计报告.html)）：管理接口无鉴权；Redis 默认密码 `echomind123` 为演示值，公网部署请修改 `.env` 中的 `REDIS_PASSWORD`；`chromadb` 在 Windows 上无预编译 wheel（Docker 内不受影响）；两套 compose 不可同时启动。
+- **已知限制**：管理接口无鉴权；Redis 默认密码 `echomind123` 为演示值，公网部署请修改 `.env` 中的 `REDIS_PASSWORD`；`chromadb` 在 Windows 上无预编译 wheel（Docker 内不受影响）；两套 compose 不可同时启动。
 - `.env` 已被 gitignore 忽略，密钥不会进入版本库；请勿将真实 Key 提交到任何公开仓库。
 
 ---
