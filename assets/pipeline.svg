@@ -50,8 +50,8 @@
     <text class="cs f" x="92" y="278">FastAPI 收口，注入</text>
     <text class="cs f" x="92" y="306">request_id</text>
   </g>
-  <path d="M412 235 H436" stroke="#22d3ee" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M432 229 L444 235 L432 241 Z" fill="#22d3ee"/>
+  <path d="M412 235 H432" stroke="#22d3ee" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M432 229 L443 235 L432 241 Z" fill="#22d3ee"/>
 
   <g>
     <rect x="443" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#38bdf8" stroke-opacity="0.45"/>
@@ -63,8 +63,8 @@
     <text class="cs f" x="467" y="278">工作记忆 · 情景记忆</text>
     <text class="cs f" x="467" y="306">· 用户画像</text>
   </g>
-  <path d="M787 235 H811" stroke="#38bdf8" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M807 229 L819 235 L807 241 Z" fill="#38bdf8"/>
+  <path d="M787 235 H807" stroke="#38bdf8" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M807 229 L818 235 L807 241 Z" fill="#38bdf8"/>
 
   <g>
     <rect x="818" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#60a5fa" stroke-opacity="0.45"/>
@@ -76,8 +76,8 @@
     <text class="cs f" x="842" y="278">LLM 0.7 + Embedding</text>
     <text class="cs f" x="842" y="306">0.2 + Pattern 0.1</text>
   </g>
-  <path d="M1162 235 H1186" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M1182 229 L1194 235 L1182 241 Z" fill="#60a5fa"/>
+  <path d="M1162 235 H1182" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M1182 229 L1193 235 L1182 241 Z" fill="#60a5fa"/>
 
   <g>
     <rect x="1193" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#818cf8" stroke-opacity="0.45"/>
@@ -91,7 +91,7 @@
   </g>
 
   <!-- 折返 -->
-  <path d="M1533 235 H1566 V355 H34 V465 H58" fill="none" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="8 6" stroke-opacity="0.75"/>
+  <path d="M1533 235 H1566 V355 H34 V465 H52" fill="none" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="8 6" stroke-opacity="0.75"/>
   <path d="M52 459 L64 465 L52 471 Z" fill="#3d5a7d"/>
 
   <!-- ================= 第二行 ================= -->
@@ -105,8 +105,8 @@
     <text class="cs f" x="92" y="508">意图 + 性能 + 降级</text>
     <text class="cs f" x="92" y="536">复杂问题并行协作</text>
   </g>
-  <path d="M412 465 H436" stroke="#a78bfa" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M432 459 L444 465 L432 471 Z" fill="#a78bfa"/>
+  <path d="M412 465 H432" stroke="#a78bfa" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M432 459 L443 465 L432 471 Z" fill="#a78bfa"/>
 
   <g>
     <rect x="443" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#c084fc" stroke-opacity="0.45"/>
@@ -118,8 +118,8 @@
     <text class="cs f" x="467" y="508">结果缓存 · 熔断降级</text>
     <text class="cs f" x="467" y="536">语义重排 · 结果兜底</text>
   </g>
-  <path d="M787 465 H811" stroke="#c084fc" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M807 459 L819 465 L807 471 Z" fill="#c084fc"/>
+  <path d="M787 465 H807" stroke="#c084fc" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M807 459 L818 465 L807 471 Z" fill="#c084fc"/>
 
   <g>
     <rect x="818" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#e879f9" stroke-opacity="0.45"/>
@@ -131,8 +131,8 @@
     <text class="cs f" x="842" y="508">Skills 注入 + 工具</text>
     <text class="cs f" x="842" y="536">结果回填后生成</text>
   </g>
-  <path d="M1162 465 H1186" stroke="#e879f9" stroke-opacity="0.7" stroke-width="2"/>
-  <path d="M1182 459 L1194 465 L1182 471 Z" fill="#e879f9"/>
+  <path d="M1162 465 H1182" stroke="#e879f9" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M1182 459 L1193 465 L1182 471 Z" fill="#e879f9"/>
 
   <g>
     <rect x="1193" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#f472b6" stroke-opacity="0.45"/>
@@ -146,9 +146,12 @@
   </g>
 
   <!-- 旁路连线 -->
-  <path d="M613 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
-  <path d="M988 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
-  <path d="M1363 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M613 560 V593" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M606 592 L613 600 L620 592 Z" fill="#3d5a7d" fill-opacity="0.85"/>
+  <path d="M988 560 V593" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M981 592 L988 600 L995 592 Z" fill="#3d5a7d" fill-opacity="0.85"/>
+  <path d="M1363 560 V593" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M1356 592 L1363 600 L1370 592 Z" fill="#3d5a7d" fill-opacity="0.85"/>
 
   <!-- ================= 旁路异步带 ================= -->
   <rect x="68" y="600" width="1465" height="150" rx="16" fill="#0b1729" stroke="#2b4560" stroke-dasharray="10 7"/>

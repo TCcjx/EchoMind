@@ -1,0 +1,21 @@
+# 行尾约定（跨机移植用，全仓库唯一一份，子目录不再单独放 .gitattributes）
+#
+# Windows 默认 core.autocrlf=true 会把文本文件的 LF 转成 CRLF。
+# 对要进 Linux 容器执行的文件这是致命的：一旦以 CRLF 进入容器，
+# 会报 `/bin/bash^M: bad interpreter`，Docker 构建/启动直接失败。
+# 这里显式锁定这类文件一律 LF。
+
+*.sh          text eol=lf
+*.conf        text eol=lf
+*.yml         text eol=lf
+*.yaml        text eol=lf
+*.py          text eol=lf
+*.js          text eol=lf
+*.ts          text eol=lf
+*.vue         text eol=lf
+*.json        text eol=lf
+Dockerfile    text eol=lf
+.dockerignore text eol=lf
+
+# 其余文件交给 Git 自动判断
+*             text=auto

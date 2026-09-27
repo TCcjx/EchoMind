@@ -62,7 +62,7 @@
     <rect x="1366" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
     <text class="ct f" x="1384" y="176">/eval</text><text class="cs f" x="1384" y="198">端到端评测</text>
   </g>
-  <path d="M800 228 V246" stroke="#22d3ee" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M800 228 V240" stroke="#22d3ee" stroke-opacity="0.6" stroke-width="2"/>
   <path d="M794 240 L800 250 L806 240 Z" fill="#22d3ee"/>
 
   <!-- ======== L2 编排层 ======== -->
@@ -83,7 +83,7 @@
     <rect x="1228" y="280" width="3" height="40" rx="1.5" fill="#38bdf8"/>
     <text class="ct f" x="1246" y="298">并行协作</text><text class="cs f" x="1246" y="320">复杂问题多 Agent 会诊</text>
   </g>
-  <path d="M800 350 V368" stroke="#38bdf8" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M800 350 V362" stroke="#38bdf8" stroke-opacity="0.6" stroke-width="2"/>
   <path d="M794 362 L800 372 L806 362 Z" fill="#38bdf8"/>
 
   <!-- ======== L3 Agent 层 ======== -->
@@ -104,7 +104,7 @@
     <rect x="1228" y="402" width="3" height="40" rx="1.5" fill="#c084fc"/>
     <text class="ct f" x="1246" y="420">Escalation</text><text class="cs f" x="1246" y="442">人工升级 · 工单工具</text>
   </g>
-  <path d="M800 472 V490" stroke="#818cf8" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M800 472 V484" stroke="#818cf8" stroke-opacity="0.6" stroke-width="2"/>
   <path d="M794 484 L800 494 L806 484 Z" fill="#818cf8"/>
 
   <!-- ======== L4 能力层 ======== -->
@@ -122,7 +122,7 @@
     <rect x="1124" y="524" width="3" height="40" rx="1.5" fill="#a78bfa"/>
     <text class="ct f" x="1142" y="542">IntentRecognizer 意图识别</text><text class="cs f" x="1142" y="564">LLM 0.7 + Embedding 0.2 + Pattern 0.1</text>
   </g>
-  <path d="M800 594 V612" stroke="#a78bfa" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M800 594 V606" stroke="#a78bfa" stroke-opacity="0.6" stroke-width="2"/>
   <path d="M794 606 L800 616 L806 606 Z" fill="#a78bfa"/>
 
   <!-- ======== L5 记忆层 ======== -->
@@ -140,7 +140,7 @@
     <rect x="1124" y="646" width="3" height="40" rx="1.5" fill="#34d399"/>
     <text class="ct f" x="1142" y="664">用户画像</text><text class="cs f" x="1142" y="686">长期偏好沉淀，异步更新不阻塞响应</text>
   </g>
-  <path d="M800 716 V734" stroke="#34d399" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M800 716 V728" stroke="#34d399" stroke-opacity="0.6" stroke-width="2"/>
   <path d="M794 728 L800 738 L806 728 Z" fill="#34d399"/>
 
   <!-- ======== L6 可观测层 ======== -->

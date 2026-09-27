@@ -19,15 +19,6 @@
       <stop offset="0.55" stop-color="#60a5fa"/>
       <stop offset="1" stop-color="#a78bfa"/>
     </linearGradient>
-    <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.10"/>
-      <stop offset="0.45" stop-color="#22d3ee" stop-opacity="0.85"/>
-      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.20"/>
-    </linearGradient>
-    <linearGradient id="wire2" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#60a5fa" stop-opacity="0.15"/>
-      <stop offset="1" stop-color="#c084fc" stop-opacity="0.8"/>
-    </linearGradient>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
       <path d="M40 0H0V40" fill="none" stroke="#14243c" stroke-width="1" opacity="0.5"/>
     </pattern>
@@ -75,34 +66,47 @@
 
   <!-- ================= 右栏：路由拓扑示意 ================= -->
   <g>
+    <!-- 输入 -->
     <rect x="872" y="270" width="120" height="62" rx="12" fill="#0f1e33" stroke="#28405f"/>
     <text class="nodeT f" x="932" y="297" text-anchor="middle">IN</text>
     <text class="nodeS f" x="932" y="319" text-anchor="middle">用户消息</text>
 
-    <path d="M992 301 H1088" stroke="url(#wire)" stroke-width="2" fill="none"/>
-    <path d="M1084 295 L1096 301 L1084 307 Z" fill="#22d3ee"/>
+    <!-- IN → Router：纯色直线 + 实心箭头 -->
+    <path d="M996 301 H1076" stroke="#22d3ee" stroke-opacity="0.85" stroke-width="2"/>
+    <path d="M1076 293 L1090 301 L1076 309 Z" fill="#22d3ee"/>
 
+    <!-- 中心路由器 -->
     <circle cx="1180" cy="301" r="94" fill="#22d3ee" fill-opacity="0.04"/>
     <circle cx="1180" cy="301" r="78" fill="#0b1a2e" stroke="#22d3ee" stroke-opacity="0.5" stroke-width="1.6"/>
     <circle cx="1180" cy="301" r="62" fill="#0e2138" stroke="#2f5c7a"/>
     <text class="hubT f" x="1180" y="295" text-anchor="middle">Router</text>
     <text class="hubS f" x="1180" y="322" text-anchor="middle">三级路由</text>
 
-    <path d="M1256 286 C1300 262 1320 208 1338 178" stroke="url(#wire2)" stroke-width="1.8" fill="none"/>
-    <path d="M1256 298 C1306 294 1316 268 1338 264" stroke="url(#wire2)" stroke-width="1.8" fill="none"/>
-    <path d="M1256 314 C1306 332 1316 376 1338 372" stroke="url(#wire2)" stroke-width="1.8" fill="none"/>
-    <path d="M1256 328 C1300 354 1320 452 1338 480" stroke="url(#wire2)" stroke-width="1.8" fill="none"/>
+    <!-- Router → 四个 Agent：纯色曲线 + 实心箭头（箭头尖贴卡片左缘 x=1340） -->
+    <path d="M1258 287 C1300 262 1316 208 1326 180" stroke="#22d3ee" stroke-opacity="0.8" stroke-width="2" fill="none"/>
+    <path d="M1326 170 L1338 177 L1326 184 Z" fill="#22d3ee"/>
 
-    <circle cx="1300" cy="236" r="4" fill="#22d3ee">
+    <path d="M1258 300 C1304 297 1316 274 1326 268" stroke="#60a5fa" stroke-opacity="0.8" stroke-width="2" fill="none"/>
+    <path d="M1326 258 L1338 265 L1326 272 Z" fill="#60a5fa"/>
+
+    <path d="M1258 315 C1304 322 1316 366 1326 372" stroke="#818cf8" stroke-opacity="0.8" stroke-width="2" fill="none"/>
+    <path d="M1326 366 L1338 373 L1326 380 Z" fill="#818cf8"/>
+
+    <path d="M1258 328 C1300 352 1316 450 1326 478" stroke="#c084fc" stroke-opacity="0.8" stroke-width="2" fill="none"/>
+    <path d="M1326 474 L1338 481 L1326 488 Z" fill="#c084fc"/>
+
+    <!-- 连线上的流动光点 -->
+    <circle cx="1300" cy="230" r="4" fill="#22d3ee">
       <animate attributeName="opacity" values="0.15;1;0.15" dur="2.6s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="1300" cy="306" r="4" fill="#60a5fa">
+    <circle cx="1300" cy="320" r="4" fill="#818cf8">
       <animate attributeName="opacity" values="0.15;1;0.15" dur="2.6s" begin="-0.9s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="1300" cy="404" r="4" fill="#c084fc">
+    <circle cx="1296" cy="400" r="4" fill="#c084fc">
       <animate attributeName="opacity" values="0.15;1;0.15" dur="2.6s" begin="-1.7s" repeatCount="indefinite"/>
     </circle>
 
+    <!-- Agent 节点 -->
     <g>
       <rect x="1340" y="144" width="200" height="66" rx="12" fill="#101d31" stroke="#2b4560"/>
       <rect x="1340" y="144" width="4" height="66" rx="2" fill="#22d3ee"/>
@@ -125,8 +129,9 @@
       <text class="nodeS f" x="1364" y="500">人工升级</text>
     </g>
 
-    <path d="M1180 379 C1180 428 1152 452 1116 468" stroke="url(#wire)" stroke-width="1.8" fill="none"/>
-    <path d="M1122 460 L1108 474 L1126 478 Z" fill="#22d3ee"/>
+    <!-- Router → Response：曲线 + 箭头（尖端贴卡顶 y=470） -->
+    <path d="M1180 379 C1180 424 1146 450 1110 462" stroke="#22d3ee" stroke-opacity="0.8" stroke-width="2" fill="none"/>
+    <path d="M1096 468 L1110 468 L1106 459 Z" fill="#22d3ee"/>
     <rect x="966" y="470" width="240" height="62" rx="12" fill="#0f1e33" stroke="#28405f"/>
     <text class="nodeT f" x="1086" y="497" text-anchor="middle">Response</text>
     <text class="nodeS f" x="1086" y="519" text-anchor="middle">回复 + 记忆写回</text>
