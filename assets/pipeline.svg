@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800" role="img" aria-label="单条消息的完整链路">
+  <title>EchoMind — 单条消息的完整链路</title>
+  <defs>
+    <linearGradient id="pbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05080f"/>
+      <stop offset="1" stop-color="#0b1424"/>
+    </linearGradient>
+    <radialGradient id="pglow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#1d4ed8" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#1d4ed8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pacc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#c084fc"/>
+    </linearGradient>
+    <pattern id="pgrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#122036" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <style><![CDATA[
+      .f { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .h1 { font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #f2f8ff; }
+      .h2 { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #8ea6c4; }
+      .num { font: 800 24px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .ct { font: 700 30px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #eaf3ff; }
+      .cm { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #7fa3c6; }
+      .cs { font: 400 22px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #9db4cf; }
+      .bandT { font: 700 22px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #a5e9f6; }
+      .bt { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #eaf3ff; }
+      .bs { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #8ba4c2; }
+      .note { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #6f89a8; }
+    ]]></style>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#pbg)"/>
+  <rect width="1600" height="800" fill="url(#pgrid)"/>
+  <ellipse cx="800" cy="360" rx="700" ry="420" fill="url(#pglow)"/>
+
+  <rect x="68" y="38" width="6" height="34" rx="3" fill="url(#pacc)"/>
+  <text class="h1 f" x="88" y="66">单条消息的完整链路</text>
+  <text class="h2 f" x="88" y="100">上半区为同步返回路径；下半区为旁路异步，不阻塞响应。</text>
+
+  <!-- ================= 第一行 ================= -->
+  <g>
+    <rect x="68" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#22d3ee" stroke-opacity="0.45"/>
+    <circle cx="112" cy="186" r="22" fill="#22d3ee" fill-opacity="0.14" stroke="#22d3ee"/>
+    <text class="num f" x="112" y="196" text-anchor="middle" fill="#22d3ee">1</text>
+    <text class="ct f" x="148" y="194">请求接入</text>
+    <text class="cm f" x="148" y="222">POST /chat</text>
+    <path d="M92 242 H384" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="92" y="278">FastAPI 收口，注入</text>
+    <text class="cs f" x="92" y="306">request_id</text>
+  </g>
+  <path d="M412 235 H436" stroke="#22d3ee" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M432 229 L444 235 L432 241 Z" fill="#22d3ee"/>
+
+  <g>
+    <rect x="443" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#38bdf8" stroke-opacity="0.45"/>
+    <circle cx="487" cy="186" r="22" fill="#38bdf8" fill-opacity="0.14" stroke="#38bdf8"/>
+    <text class="num f" x="487" y="196" text-anchor="middle" fill="#38bdf8">2</text>
+    <text class="ct f" x="523" y="194">记忆读取</text>
+    <text class="cm f" x="523" y="222">MemoryManager</text>
+    <path d="M467 242 H759" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="467" y="278">工作记忆 · 情景记忆</text>
+    <text class="cs f" x="467" y="306">· 用户画像</text>
+  </g>
+  <path d="M787 235 H811" stroke="#38bdf8" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M807 229 L819 235 L807 241 Z" fill="#38bdf8"/>
+
+  <g>
+    <rect x="818" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#60a5fa" stroke-opacity="0.45"/>
+    <circle cx="862" cy="186" r="22" fill="#60a5fa" fill-opacity="0.14" stroke="#60a5fa"/>
+    <text class="num f" x="862" y="196" text-anchor="middle" fill="#60a5fa">3</text>
+    <text class="ct f" x="898" y="194">意图识别</text>
+    <text class="cm f" x="898" y="222">IntentRecognizer</text>
+    <path d="M842 242 H1134" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="842" y="278">LLM 0.7 + Embedding</text>
+    <text class="cs f" x="842" y="306">0.2 + Pattern 0.1</text>
+  </g>
+  <path d="M1162 235 H1186" stroke="#60a5fa" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M1182 229 L1194 235 L1182 241 Z" fill="#60a5fa"/>
+
+  <g>
+    <rect x="1193" y="140" width="340" height="190" rx="14" fill="#0e1928" stroke="#818cf8" stroke-opacity="0.45"/>
+    <circle cx="1237" cy="186" r="22" fill="#818cf8" fill-opacity="0.14" stroke="#818cf8"/>
+    <text class="num f" x="1237" y="196" text-anchor="middle" fill="#818cf8">4</text>
+    <text class="ct f" x="1273" y="194">知识检索</text>
+    <text class="cm f" x="1273" y="222">KnowledgeBase</text>
+    <path d="M1217 242 H1509" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="1217" y="278">按意图决定是否检索</text>
+    <text class="cs f" x="1217" y="306">寒暄类直接跳过</text>
+  </g>
+
+  <!-- 折返 -->
+  <path d="M1533 235 H1566 V355 H34 V465 H58" fill="none" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="8 6" stroke-opacity="0.75"/>
+  <path d="M52 459 L64 465 L52 471 Z" fill="#3d5a7d"/>
+
+  <!-- ================= 第二行 ================= -->
+  <g>
+    <rect x="68" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#a78bfa" stroke-opacity="0.45"/>
+    <circle cx="112" cy="416" r="22" fill="#a78bfa" fill-opacity="0.14" stroke="#a78bfa"/>
+    <text class="num f" x="112" y="426" text-anchor="middle" fill="#a78bfa">5</text>
+    <text class="ct f" x="148" y="424">智能路由</text>
+    <text class="cm f" x="148" y="452">AgentOrchestrator</text>
+    <path d="M92 472 H384" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="92" y="508">意图 + 性能 + 降级</text>
+    <text class="cs f" x="92" y="536">复杂问题并行协作</text>
+  </g>
+  <path d="M412 465 H436" stroke="#a78bfa" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M432 459 L444 465 L432 471 Z" fill="#a78bfa"/>
+
+  <g>
+    <rect x="443" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#c084fc" stroke-opacity="0.45"/>
+    <circle cx="487" cy="416" r="22" fill="#c084fc" fill-opacity="0.14" stroke="#c084fc"/>
+    <text class="num f" x="487" y="426" text-anchor="middle" fill="#c084fc">6</text>
+    <text class="ct f" x="523" y="424">工具调用</text>
+    <text class="cm f" x="523" y="452">MCPToolManager</text>
+    <path d="M467 472 H759" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="467" y="508">结果缓存 · 熔断降级</text>
+    <text class="cs f" x="467" y="536">语义重排 · 结果兜底</text>
+  </g>
+  <path d="M787 465 H811" stroke="#c084fc" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M807 459 L819 465 L807 471 Z" fill="#c084fc"/>
+
+  <g>
+    <rect x="818" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#e879f9" stroke-opacity="0.45"/>
+    <circle cx="862" cy="416" r="22" fill="#e879f9" fill-opacity="0.14" stroke="#e879f9"/>
+    <text class="num f" x="862" y="426" text-anchor="middle" fill="#e879f9">7</text>
+    <text class="ct f" x="898" y="424">回复生成</text>
+    <text class="cm f" x="898" y="452">BaseAgent</text>
+    <path d="M842 472 H1134" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="842" y="508">Skills 注入 + 工具</text>
+    <text class="cs f" x="842" y="536">结果回填后生成</text>
+  </g>
+  <path d="M1162 465 H1186" stroke="#e879f9" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M1182 459 L1194 465 L1182 471 Z" fill="#e879f9"/>
+
+  <g>
+    <rect x="1193" y="370" width="340" height="190" rx="14" fill="#0e1928" stroke="#f472b6" stroke-opacity="0.45"/>
+    <circle cx="1237" cy="416" r="22" fill="#f472b6" fill-opacity="0.14" stroke="#f472b6"/>
+    <text class="num f" x="1237" y="426" text-anchor="middle" fill="#f472b6">8</text>
+    <text class="ct f" x="1273" y="424">记忆写回</text>
+    <text class="cm f" x="1273" y="452">ConversationMemory</text>
+    <path d="M1217 472 H1509" stroke="#22354d" stroke-width="1"/>
+    <text class="cs f" x="1217" y="508">Redis 工作记忆 +</text>
+    <text class="cs f" x="1217" y="536">ChromaDB 情景记忆</text>
+  </g>
+
+  <!-- 旁路连线 -->
+  <path d="M613 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M988 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+  <path d="M1363 560 V596" stroke="#3d5a7d" stroke-width="2" stroke-dasharray="6 5" stroke-opacity="0.7"/>
+
+  <!-- ================= 旁路异步带 ================= -->
+  <rect x="68" y="600" width="1465" height="150" rx="16" fill="#0b1729" stroke="#2b4560" stroke-dasharray="10 7"/>
+  <text class="bandT f" x="92" y="632">旁路异步 · ASYNC</text>
+
+  <g>
+    <rect x="92" y="646" width="446" height="86" rx="12" fill="#101d31" stroke="#2b4560"/>
+    <rect x="92" y="646" width="4" height="86" rx="2" fill="#22d3ee"/>
+    <text class="bt f" x="116" y="682">在线监控</text>
+    <text class="bs f" x="116" y="710">Prometheus 指标 · 异常检测 · 调权</text>
+  </g>
+  <g>
+    <rect x="570" y="646" width="446" height="86" rx="12" fill="#101d31" stroke="#2b4560"/>
+    <rect x="570" y="646" width="4" height="86" rx="2" fill="#60a5fa"/>
+    <text class="bt f" x="594" y="682">质量评测</text>
+    <text class="bs f" x="594" y="710">LLM-as-Judge 端到端评测，支持回归基线</text>
+  </g>
+  <g>
+    <rect x="1048" y="646" width="446" height="86" rx="12" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1048" y="646" width="4" height="86" rx="2" fill="#a78bfa"/>
+    <text class="bt f" x="1072" y="682">画像更新</text>
+    <text class="bs f" x="1072" y="710">异步更新用户画像，不阻塞主链路响应</text>
+  </g>
+
+  <text class="note f" x="68" y="786">全程共享 request_id；工具调用可回放 /trace/tool/{id}，端到端质量可跑 /eval/run。</text>
+</svg>

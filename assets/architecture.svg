@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="890" viewBox="0 0 1600 890" role="img" aria-label="EchoMind 分层架构">
+  <title>EchoMind — 分层架构</title>
+  <defs>
+    <linearGradient id="abg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05080f"/>
+      <stop offset="1" stop-color="#0b1424"/>
+    </linearGradient>
+    <radialGradient id="aglow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#0e7490" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#0e7490" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="aacc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+    <pattern id="agrid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#122036" stroke-width="1" opacity="0.45"/>
+    </pattern>
+    <style><![CDATA[
+      .f { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .h1 { font: 800 34px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #f2f8ff; }
+      .h2 { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #8ea6c4; }
+      .ln { font: 700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .ct { font: 700 22px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #eaf3ff; }
+      .cs { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #8ba4c2; }
+      .note { font: 400 20px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #6f89a8; }
+    ]]></style>
+  </defs>
+
+  <rect width="1600" height="890" fill="url(#abg)"/>
+  <rect width="1600" height="890" fill="url(#agrid)"/>
+  <ellipse cx="820" cy="470" rx="720" ry="470" fill="url(#aglow)"/>
+
+  <rect x="68" y="40" width="6" height="34" rx="3" fill="url(#aacc)"/>
+  <text class="h1 f" x="88" y="68">分层架构</text>
+  <text class="h2 f" x="88" y="102">自上而下：接入 → 编排 → Agent → 能力 → 记忆 → 可观测。每层只依赖下一层。</text>
+
+  <!-- ======== L1 接入层 ======== -->
+  <rect x="68" y="128" width="1465" height="100" rx="14" fill="#0c1728" stroke="#22d3ee" stroke-opacity="0.28"/>
+  <rect x="88" y="148" width="172" height="60" rx="10" fill="#22d3ee" fill-opacity="0.10" stroke="#22d3ee" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="187" fill="#7fe6f7">接入层</text>
+  <g>
+    <rect x="280" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="298" y="176">/chat</text><text class="cs f" x="298" y="198">对话主链路</text>
+    <rect x="461" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="461" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="479" y="176">/search</text><text class="cs f" x="479" y="198">检索链路演示</text>
+    <rect x="642" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="642" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="660" y="176">/knowledge</text><text class="cs f" x="660" y="198">知识库增删查</text>
+    <rect x="823" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="823" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="841" y="176">/skills</text><text class="cs f" x="841" y="198">技能热加载</text>
+    <rect x="1004" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1004" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="1022" y="176">/monitor</text><text class="cs f" x="1022" y="198">监控摘要</text>
+    <rect x="1185" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1185" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="1203" y="176">/trace</text><text class="cs f" x="1203" y="198">调用回放</text>
+    <rect x="1366" y="148" width="167" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1366" y="158" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="1384" y="176">/eval</text><text class="cs f" x="1384" y="198">端到端评测</text>
+  </g>
+  <path d="M800 228 V246" stroke="#22d3ee" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M794 240 L800 250 L806 240 Z" fill="#22d3ee"/>
+
+  <!-- ======== L2 编排层 ======== -->
+  <rect x="68" y="250" width="1465" height="100" rx="14" fill="#0c1728" stroke="#38bdf8" stroke-opacity="0.28"/>
+  <rect x="88" y="270" width="172" height="60" rx="10" fill="#38bdf8" fill-opacity="0.10" stroke="#38bdf8" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="309" fill="#a8d8fb">编排层</text>
+  <g>
+    <rect x="280" y="270" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="280" width="3" height="40" rx="1.5" fill="#38bdf8"/>
+    <text class="ct f" x="298" y="298">意图路由</text><text class="cs f" x="298" y="320">intent → Agent 主决策</text>
+    <rect x="596" y="270" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="596" y="280" width="3" height="40" rx="1.5" fill="#38bdf8"/>
+    <text class="ct f" x="614" y="298">性能路由</text><text class="cs f" x="614" y="320">成功率 / 耗时动态调权</text>
+    <rect x="912" y="270" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="912" y="280" width="3" height="40" rx="1.5" fill="#38bdf8"/>
+    <text class="ct f" x="930" y="298">降级路由</text><text class="cs f" x="930" y="320">失败 / 超时转兜底 Agent</text>
+    <rect x="1228" y="270" width="305" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1228" y="280" width="3" height="40" rx="1.5" fill="#38bdf8"/>
+    <text class="ct f" x="1246" y="298">并行协作</text><text class="cs f" x="1246" y="320">复杂问题多 Agent 会诊</text>
+  </g>
+  <path d="M800 350 V368" stroke="#38bdf8" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M794 362 L800 372 L806 362 Z" fill="#38bdf8"/>
+
+  <!-- ======== L3 Agent 层 ======== -->
+  <rect x="68" y="372" width="1465" height="100" rx="14" fill="#0c1728" stroke="#818cf8" stroke-opacity="0.28"/>
+  <rect x="88" y="392" width="172" height="60" rx="10" fill="#818cf8" fill-opacity="0.10" stroke="#818cf8" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="431" fill="#c3c8fb">Agent 层</text>
+  <g>
+    <rect x="280" y="392" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="402" width="3" height="40" rx="1.5" fill="#22d3ee"/>
+    <text class="ct f" x="298" y="420">General</text><text class="cs f" x="298" y="442">通用问答 · 知识检索工具</text>
+    <rect x="596" y="392" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="596" y="402" width="3" height="40" rx="1.5" fill="#60a5fa"/>
+    <text class="ct f" x="614" y="420">Technical</text><text class="cs f" x="614" y="442">技术排查 · 日志工具</text>
+    <rect x="912" y="392" width="302" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="912" y="402" width="3" height="40" rx="1.5" fill="#818cf8"/>
+    <text class="ct f" x="930" y="420">Billing</text><text class="cs f" x="930" y="442">账单账务 · 退款工具</text>
+    <rect x="1228" y="392" width="305" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1228" y="402" width="3" height="40" rx="1.5" fill="#c084fc"/>
+    <text class="ct f" x="1246" y="420">Escalation</text><text class="cs f" x="1246" y="442">人工升级 · 工单工具</text>
+  </g>
+  <path d="M800 472 V490" stroke="#818cf8" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M794 484 L800 494 L806 484 Z" fill="#818cf8"/>
+
+  <!-- ======== L4 能力层 ======== -->
+  <rect x="68" y="494" width="1465" height="100" rx="14" fill="#0c1728" stroke="#a78bfa" stroke-opacity="0.28"/>
+  <rect x="88" y="514" width="172" height="60" rx="10" fill="#a78bfa" fill-opacity="0.10" stroke="#a78bfa" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="553" fill="#d5c8ff">能力层</text>
+  <g>
+    <rect x="280" y="514" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="524" width="3" height="40" rx="1.5" fill="#a78bfa"/>
+    <text class="ct f" x="298" y="542">MCPToolManager 工具层</text><text class="cs f" x="298" y="564">结果缓存 · 熔断 · 重排 · 兜底</text>
+    <rect x="702" y="514" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="702" y="524" width="3" height="40" rx="1.5" fill="#a78bfa"/>
+    <text class="ct f" x="720" y="542">SkillLoader 技能热加载</text><text class="cs f" x="720" y="564">改 skills 目录后 reload 即生效</text>
+    <rect x="1124" y="514" width="409" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1124" y="524" width="3" height="40" rx="1.5" fill="#a78bfa"/>
+    <text class="ct f" x="1142" y="542">IntentRecognizer 意图识别</text><text class="cs f" x="1142" y="564">LLM 0.7 + Embedding 0.2 + Pattern 0.1</text>
+  </g>
+  <path d="M800 594 V612" stroke="#a78bfa" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M794 606 L800 616 L806 606 Z" fill="#a78bfa"/>
+
+  <!-- ======== L5 记忆层 ======== -->
+  <rect x="68" y="616" width="1465" height="100" rx="14" fill="#0c1728" stroke="#34d399" stroke-opacity="0.28"/>
+  <rect x="88" y="636" width="172" height="60" rx="10" fill="#34d399" fill-opacity="0.10" stroke="#34d399" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="675" fill="#8ee9c4">记忆层</text>
+  <g>
+    <rect x="280" y="636" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="646" width="3" height="40" rx="1.5" fill="#34d399"/>
+    <text class="ct f" x="298" y="664">Redis 工作记忆</text><text class="cs f" x="298" y="686">会话窗口短期上下文，TTL 自动过期</text>
+    <rect x="702" y="636" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="702" y="646" width="3" height="40" rx="1.5" fill="#34d399"/>
+    <text class="ct f" x="720" y="664">ChromaDB 情景记忆</text><text class="cs f" x="720" y="686">向量化历史对话，语义召回相似会话</text>
+    <rect x="1124" y="636" width="409" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1124" y="646" width="3" height="40" rx="1.5" fill="#34d399"/>
+    <text class="ct f" x="1142" y="664">用户画像</text><text class="cs f" x="1142" y="686">长期偏好沉淀，异步更新不阻塞响应</text>
+  </g>
+  <path d="M800 716 V734" stroke="#34d399" stroke-opacity="0.6" stroke-width="2"/>
+  <path d="M794 728 L800 738 L806 728 Z" fill="#34d399"/>
+
+  <!-- ======== L6 可观测层 ======== -->
+  <rect x="68" y="738" width="1465" height="100" rx="14" fill="#0c1728" stroke="#fbbf24" stroke-opacity="0.28"/>
+  <rect x="88" y="758" width="172" height="60" rx="10" fill="#fbbf24" fill-opacity="0.10" stroke="#fbbf24" stroke-opacity="0.5"/>
+  <text class="ln f" x="112" y="797" fill="#fbd88a">可观测层</text>
+  <g>
+    <rect x="280" y="758" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="280" y="768" width="3" height="40" rx="1.5" fill="#fbbf24"/>
+    <text class="ct f" x="298" y="786">PerformanceMonitor</text><text class="cs f" x="298" y="808">Prometheus 指标 · 异常检测</text>
+    <rect x="702" y="758" width="408" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="702" y="768" width="3" height="40" rx="1.5" fill="#fbbf24"/>
+    <text class="ct f" x="720" y="786">Evaluator 质量评测</text><text class="cs f" x="720" y="808">LLM-as-Judge 打分，可存回归基线</text>
+    <rect x="1124" y="758" width="409" height="60" rx="10" fill="#101d31" stroke="#2b4560"/>
+    <rect x="1124" y="768" width="3" height="40" rx="1.5" fill="#fbbf24"/>
+    <text class="ct f" x="1142" y="786">Trace 调用链路</text><text class="cs f" x="1142" y="808">每次工具调用可回放，定位问题靠它</text>
+  </g>
+
+  <text class="note f" x="68" y="874">外部依赖（LLM API / Redis / ChromaDB / Prometheus / Nginx）由 docker compose 统一编排，两套 compose 不可同时启动。</text>
+</svg>
