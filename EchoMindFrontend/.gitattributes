@@ -1,0 +1,19 @@
+# 行尾约定（跨机移植用）
+#
+# Windows 默认 core.autocrlf=true 会把文本文件的 LF 转成 CRLF。
+# 容器启动脚本一旦以 CRLF 进入 Linux 容器，会报
+# `/bin/bash^M: bad interpreter`，导致容器起不来。
+# 这里显式锁定容器内要执行的文件一律 LF。
+
+*.sh        text eol=lf
+*.conf      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.js        text eol=lf
+*.ts        text eol=lf
+*.vue       text eol=lf
+*.json      text eol=lf
+Dockerfile  text eol=lf
+
+# 其余文件交给 Git 自动判断
+*           text=auto

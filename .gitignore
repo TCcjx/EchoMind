@@ -1,0 +1,24 @@
+# 根级忽略规则。
+# 子目录 EchoMind/ 和 EchoMindFrontend/ 各有自己的 .gitignore，
+# 那里已覆盖 Python / Node / IDE / 数据目录等规则；
+# 这里只补充根目录层面需要排除的内容。
+
+# WorkBuddy 工作数据：审计记录、记忆日志、临时冒烟脚本，不是项目源码
+.workbuddy/
+
+# 环境变量（含密钥）
+.env
+
+# IDE / 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 备份文件
+*~
+*.bak

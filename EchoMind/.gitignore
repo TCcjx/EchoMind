@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.pytest_cache/
+
+# 环境变量（含敏感信息）
+.env
+
+# 数据目录
+data/
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker 构建产物
+# 只忽略「构建脚本的重复副本」（如 build-image(1).sh），脚本本身必须入库：
+# 在新克隆的仓库里 build-image*.sh 会把 build-image.sh 一起挡掉，
+# 导致换机器后缺少镜像构建脚本。
+build-image*.sh
+!build-image.sh
+
+# ChromaDB 本地数据
+*.sqlite3
+
+# 备份文件
+*~
+*.bak
+docker-compose(1).yml
