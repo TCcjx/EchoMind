@@ -74,7 +74,7 @@ ChatRequest
 
 留存一份个人实验记录：运行日期、Git 版本、配置方式（密钥打码）、输入、响应、耗时、指标和结论。没有这份记录，不要在简历里写提升百分比、命中率或吞吐量。
 
-特别提示：仓库自带的 `EchoMind/data/eval/baseline.json` 只有 8 条样本、pass_rate 0.125，且四个质量维度全部恰好是 0.5——这是 LLM-Judge 调用失败时的默认值，不是测出来的质量分。不要用这份文件作为简历数据来源。另外 `/eval/run` 每次运行都会覆盖 baseline，跑之前先备份。
+特别提示：`EchoMind/data/eval/baseline.json` 是**运行产物**，`data/` 已被 gitignore 忽略、不随仓库分发，本地跑过 `POST /eval/run` 才会出现。它只在请求体显式传 `save_baseline: true` 时才写入，且写入前会自动把上一份重命名为 `baseline.json.bak`，所以默认调用不会动基线。另需注意：API Key 无效时 LLM-Judge 调用失败，各质量维度会返回默认值 0.5、pass_rate 偏低——那是调用失败的占位值，不是实测质量分，不要拿这类数字写进简历。
 
 ## 5. 面试讲述模板
 
