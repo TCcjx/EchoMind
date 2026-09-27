@@ -190,11 +190,11 @@ EchoMind/
 
 ## 注意事项（跨机移植）
 
-- **整个目录是一个统一的 git 仓库**（2026-09-28 起）。原先 `EchoMind/` 与 `EchoMindFrontend/` 各自独立的仓库已合并，`README.md`、`EchoMind学习指南.md` 现在都在同一个版本库内。当前无 remote，要推送执行 `git remote add origin <你的仓库地址>`。
+- **整个目录是一个统一的 git 仓库**（2026-09-28 起）。原先 `EchoMind/` 与 `EchoMindFrontend/` 各自独立的仓库已合并，`README.md`、`EchoMind学习指南.md` 现在都在同一个版本库内。远程仓库：`github.com/TCcjx/EchoMind`。
 - **历史备份**：子仓库合并前的 `.git` 备份在 `D:/git_repository/_EchoMind_subgit_backup_20260928/`；再早的原作者提交历史备份在 `D:/git_repository/_EchoMind_git_backup_20260927/`。确认无用后可删。
 - **本机环境需重建**：`node_modules`、`dist`、`.idea`、`.venv` 等环境/产物文件已清理，未纳入版本库。按上文「本地开发」重建即可（`npm install` / `pip install -r requirements-dev.txt`）。原作者的 macOS 残留环境（`darwin-arm64` 版 `node_modules`、`.DS_Store`）已于 2026-09-27 清理。
 - **已知限制**：管理接口无鉴权；Redis 默认密码 `echomind123` 为演示值，公网部署请修改 `.env` 中的 `REDIS_PASSWORD`；`chromadb` 在 Windows 上无预编译 wheel（Docker 内不受影响）；两套 compose 不可同时启动。
-- `.env` 已被 gitignore 忽略，密钥不会进入版本库；请勿将真实 Key 提交到任何公开仓库。
+- `.env`、`data/`、`node_modules/` 等运行环境从未纳入版本库（仓库不携带 ignore 规则文件，提交时请勿使用 `git add .`，逐个文件添加即可）；请勿将真实 Key 提交到任何公开仓库。
 
 ---
 
