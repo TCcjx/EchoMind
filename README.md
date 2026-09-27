@@ -17,7 +17,6 @@
 <img src="https://img.shields.io/badge/测试-23%20passed%20%2F%202%20skipped-2EA043?style=flat-square" alt="测试状态">
 <img src="https://img.shields.io/badge/架构-多%20Agent%20%2B%20RAG%20%2B%20MCP-1F6FEB?style=flat-square" alt="架构">
 <img src="https://img.shields.io/badge/仓库-统一单仓库-8250DF?style=flat-square" alt="统一单仓库">
-<img src="https://img.shields.io/badge/用途-求职展示项目-F59E0B?style=flat-square" alt="求职展示项目">
 
 </div>
 
