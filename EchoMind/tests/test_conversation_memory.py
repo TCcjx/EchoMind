@@ -2,10 +2,6 @@
 import asyncio
 import json
 
-import pytest
-
-# memory.conversation_memory 在模块级 import chromadb，缺依赖时整套记忆测试跳过。
-pytest.importorskip("chromadb", reason="conversation_memory 在模块级依赖 chromadb")
 
 from memory.conversation_memory import MemoryManager, MsgRole  # noqa: E402
 

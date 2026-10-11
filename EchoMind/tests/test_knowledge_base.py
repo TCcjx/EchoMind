@@ -1,7 +1,3 @@
-import pytest
-
-# mcp.knowledge_base 在模块级 import chromadb；没有该依赖时跳过而不是让整条 pytest 中断收集。
-pytest.importorskip("chromadb", reason="knowledge_base 在模块级依赖 chromadb")
 
 from mcp.knowledge_base import KnowledgeBase
 

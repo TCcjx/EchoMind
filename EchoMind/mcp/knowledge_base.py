@@ -16,7 +16,6 @@ import hashlib
 import logging
 from typing import Any, Dict, List, Optional
 
-import chromadb
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +37,8 @@ class KnowledgeBase:
         chroma_port: int = 8000,
         chroma_path: str = "./data/chroma",
     ):
+        import chromadb
+
         # 优先连接独立 ChromaDB 服务（服务端内置 embedding 模型，客户端无需下载）
         self._use_server = False
         try:
@@ -176,6 +177,14 @@ class KnowledgeBase:
             sent = sent.strip()
             if not sent:
                 continue
+            # 没有句号的长段落也必须遵守切片长度上限。
+            if len(sent) > chunk_size:
+                if current:
+                    chunks.append(current)
+                    current = ""
+                while len(sent) > chunk_size:
+                    chunks.append(sent[:chunk_size])
+                    sent = sent[chunk_size:]
             if len(current) + len(sent) + 1 > chunk_size:
                 if current:
                     chunks.append(current)

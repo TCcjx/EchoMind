@@ -32,7 +32,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Response, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 load_dotenv()
 
@@ -213,11 +213,19 @@ async def lifespan(app: FastAPI):
         base_url=cfg.get("base_url"),
         model=cfg["model"],
         baseline_path=os.getenv("EVAL_BASELINE_PATH", "/app/data/eval/baseline.json"),
+        dialog_runner=_evaluate_chat_turn,
     )
 
     logger.info("EchoMind 已就绪")
     yield
 
+    # 先取消画像更新，再关闭它们可能使用的 Redis 连接。
+    pending = list(_background_tasks)
+    for task in pending:
+        task.cancel()
+    if pending:
+        await asyncio.gather(*pending, return_exceptions=True)
+    _background_tasks.clear()
     await _monitor.stop()
     if _memory is not None:
         await _memory.close()
@@ -307,6 +315,24 @@ async def reload_skills():
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
+    """完整聊天链路，并逐轮记录全链路耗时。"""
+    t0 = time.monotonic()
+    success = False
+    try:
+        response = await _chat(req)
+        success = True
+        return response
+    finally:
+        if _monitor is not None:
+            _monitor.record_request((time.monotonic() - t0) * 1000, success)
+
+
+async def _evaluate_chat_turn(message: str, user_id: str, conv_id: str):
+    """评测复用实际聊天链路，覆盖记忆、预检索、实体和编排。"""
+    return await chat(ChatRequest(message=message, user_id=user_id, conv_id=conv_id))
+
+
+async def _chat(req: ChatRequest):
     """
     主对话接口。完整流程：
       记忆读取 → 意图识别 → Agent 路由 → 执行 → 记忆写入
@@ -388,7 +414,7 @@ async def chat(req: ChatRequest):
         escalated=result.escalated,
         latency_ms=round((time.monotonic() - request_t0) * 1000, 1),
         # 知识来源有两种：主链路预注入命中，或 Agent 自主调用检索工具。
-        knowledge_used=knowledge_hit or "search_knowledge_base" in result.tools_used,
+        knowledge_used=knowledge_hit or any(call.get("knowledge_hit") for call in result.tool_traces),
         entities=intent_result.entities,
         intent_confidence=round(intent_result.confidence, 4),
         intent_source_scores=intent_result.source_scores,
@@ -413,7 +439,7 @@ async def _build_knowledge_context(message: str, intent=None, top_k: int = 3) ->
         parts = ["[知识库检索结果]"]
         used = False
         for i, item in enumerate(result.data[:top_k], start=1):
-            if not isinstance(item, dict):
+            if not isinstance(item, dict) or item.get("fallback"):
                 continue
             title = str(item.get("title", "未命名文档"))
             content = str(item.get("content", "")).strip()
@@ -489,7 +515,8 @@ async def list_recent_tool_traces(limit: int = 20):
 @app.get("/metrics")
 async def prometheus_metrics():
     """Prometheus 指标入口。"""
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    data = generate_latest(_monitor.registry) if _monitor is not None else generate_latest()
+    return Response(data, media_type=CONTENT_TYPE_LATEST)
 
 
 @app.post("/search")
@@ -513,13 +540,13 @@ async def search(query: str, top_k: int = 5):
 
 class DocInput(BaseModel):
     """单篇文档输入。"""
-    title:   str
-    content: str
+    title:   str = Field(min_length=1, max_length=500)
+    content: str = Field(min_length=1)
 
 
 class BatchDocInput(BaseModel):
     """批量文档导入请求体。"""
-    documents: List[DocInput]
+    documents: List[DocInput] = Field(min_length=1, max_length=1000)
 
 
 class EvalIntentInput(BaseModel):
@@ -568,6 +595,7 @@ async def add_knowledge(body: BatchDocInput):
         raise HTTPException(503, "知识库未初始化")
     kb = tool.handler.__self__
     count = await kb.add_documents_async([{"title": d.title, "content": d.content} for d in body.documents])
+    _tool_manager.invalidate_cache("knowledge_search")
     total = await kb.doc_count_async()
     return {"message": f"成功导入 {count} 个文档片段", "added_chunks": count, "total_chunks": total}
 
@@ -588,14 +616,17 @@ async def upload_knowledge(file: UploadFile = File(...)):
         raise HTTPException(503, "知识库未初始化")
     kb = tool.handler.__self__
 
-    content = await file.read()
+    content = await file.read(10 * 1024 * 1024 + 1)
     if len(content) > 10 * 1024 * 1024:
         raise HTTPException(413, "文件大小超过 10MB 限制")
 
-    text = content.decode("utf-8", errors="ignore")
+    try:
+        text = content.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        raise HTTPException(400, "请上传 UTF-8 编码的文本文件")
     filename = file.filename or "unknown"
 
-    if filename.endswith(".json"):
+    if filename.lower().endswith(".json"):
         import json as _json
         try:
             docs = _json.loads(text)
@@ -608,7 +639,12 @@ async def upload_knowledge(file: UploadFile = File(...)):
         title = filename.rsplit(".", 1)[0] if "." in filename else filename
         docs = [{"title": title, "content": text}]
 
-    count = await kb.add_documents_async(docs)
+    try:
+        validated = BatchDocInput(documents=docs)
+    except ValidationError:
+        raise HTTPException(400, "文档格式不正确：需要非空数组，每项包含字符串 title 和 content，且均不能为空")
+    count = await kb.add_documents_async([d.model_dump() for d in validated.documents])
+    _tool_manager.invalidate_cache("knowledge_search")
     total = await kb.doc_count_async()
     return {
         "message": f"文件 {filename} 导入成功",

@@ -9,7 +9,7 @@
 关键设计：
   - 上下文构建时三级记忆融合，按重要性 + 时效性排序
   - 工作记忆超过阈值时自动压缩（LLM 摘要），防止 context 爆炸
-  - 所有 Embedding 通过 Anthropic API 生成，无本地模型
+  - 情景记忆与画像使用 ChromaDB 内置 Embedding 模型
 """
 import hashlib
 import asyncio
@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-import chromadb
+from weakref import WeakValueDictionary
 import redis.asyncio as redis
 from anthropic import AsyncAnthropic
 
@@ -96,6 +96,9 @@ class MemoryManager:
         base_url:     Optional[str] = None,
         model:        str = "claude-3-5-sonnet-20241022",
     ):
+        import chromadb
+
+        self._compression_locks = WeakValueDictionary()
         kwargs: Dict[str, Any] = {"api_key": api_key}
         if base_url:
             kwargs["base_url"] = base_url
@@ -262,6 +265,18 @@ class MemoryManager:
     # ── 压缩（防止 context 爆炸）─────────────────────────────────────────────
 
     async def _compress(self, user_id: str, conv_id: str) -> None:
+        # 单进程内同一会话只允许一次压缩；弱引用避免闲置会话锁不断累积。
+        if not hasattr(self, "_compression_locks"):
+            self._compression_locks = WeakValueDictionary()
+        key = self._wm_key(user_id, conv_id)
+        lock = self._compression_locks.get(key)
+        if lock is None:
+            lock = asyncio.Lock()
+            self._compression_locks[key] = lock
+        async with lock:
+            await self._compress_locked(user_id, conv_id)
+
+    async def _compress_locked(self, user_id: str, conv_id: str) -> None:
         """
         工作记忆压缩：
           1. 用 LLM 对旧消息生成摘要
@@ -274,7 +289,6 @@ class MemoryManager:
             return
 
         to_compress = messages[:-5]   # 保留最近 5 条
-        keep        = messages[-5:]
 
         # LLM 摘要
         text = self._safe_text("\n".join(f"{m.role.value}: {m.content}" for m in to_compress))
@@ -297,14 +311,9 @@ class MemoryManager:
         # 旧消息存入情景记忆
         await self._store_episodic(user_id, conv_id, text, summary)
 
-        # 重置工作记忆为最近 5 条
+        # 原地裁去快照中的旧消息：保持最新在前，摘要期间的新消息也不会被删除。
         key = self._wm_key(user_id, conv_id)
-        await self._redis.delete(key)
-        for m in reversed(keep):
-            await self._redis.lpush(key, json.dumps({
-                "role": m.role.value, "content": m.content,
-                "ts": m.timestamp.isoformat(), "metadata": m.metadata,
-            }))
+        await self._redis.ltrim(key, 0, -len(to_compress) - 1)
         await self._redis.expire(key, 86400)
         logger.info(f"工作记忆压缩完成: {user_id}/{conv_id}，摘要 {len(summary)} 字")
 
@@ -341,7 +350,7 @@ class MemoryManager:
             results = await self._query_episodic(
                 query_text,
                 n_results=self.HISTORY_TOP_K,
-                where={"user_id": self._safe_text(user_id), "conv_id": self._safe_text(conv_id)},
+                where={"$and": [{"user_id": user_id}, {"conv_id": conv_id}]},
             )
             docs = self._extract_docs(results)
             if len(docs) < self.HISTORY_TOP_K:

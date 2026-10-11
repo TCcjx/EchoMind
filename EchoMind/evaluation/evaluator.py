@@ -19,9 +19,10 @@ import logging
 import pathlib
 import statistics
 import time
+import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from anthropic import AsyncAnthropic
 
@@ -232,12 +233,14 @@ class EndToEndEvaluator:
         base_url: Optional[str] = None,
         model:    str = "claude-3-5-sonnet-20241022",
         baseline_path: Optional[str] = None,
+        dialog_runner: Optional[Callable[..., Awaitable[Any]]] = None,
     ):
         kwargs: Dict[str, Any] = {"api_key": api_key}
         if base_url:
             kwargs["base_url"] = base_url
         client = AsyncAnthropic(**kwargs)
 
+        self._dialog_runner    = dialog_runner
         self._orchestrator     = orchestrator
         self._judge            = LLMJudge(client, model)
         self._intent_evaluator = IntentEvaluator(recognizer)
@@ -334,8 +337,9 @@ class EndToEndEvaluator:
         if not questions:
             return []
 
-        conv_id = str(case.get("conv_id") or f"eval_{case_idx}")
-        user_id = str(case.get("user_id") or "eval_user")
+        run_id = uuid.uuid4().hex
+        conv_id = str(case.get("conv_id") or f"eval_{run_id}_{case_idx}")
+        user_id = str(case.get("user_id") or f"eval_{run_id}")
         history: List[Dict[str, str]] = []
         results: List[EvalResult] = []
 
@@ -348,7 +352,10 @@ class EndToEndEvaluator:
                 context=context,
                 history=history[-6:] if history else None,
             )
-            orch_result = await self._orchestrator.run(orch_req)
+            if self._dialog_runner is not None:
+                orch_result = await self._dialog_runner(question, user_id, conv_id)
+            else:
+                orch_result = await self._orchestrator.run(orch_req)
             actual_answer = orch_result.response
 
             scores = await self._judge.judge(question, actual_answer, context=context or None)
@@ -372,8 +379,8 @@ class EndToEndEvaluator:
                 metadata={
                     "question": question,
                     "response": actual_answer,
-                    "agent_type": orch_result.agent_type.value,
-                    "intent": orch_result.intent.value if orch_result.intent else None,
+                    "agent_type": getattr(orch_result.agent_type, "value", orch_result.agent_type),
+                    "intent": getattr(orch_result.intent, "value", orch_result.intent),
                     "turn": turn_idx,
                     "conv_id": conv_id,
                     "judge_failed": scores.judge_failed,

@@ -441,10 +441,17 @@ async function sendMessage() {
       persist()
     }
     lastResponse.value = response
-    lastTrace.value = await loadToolTrace(response.requestId)
+    lastTrace.value = null
     const meta = [response.intent, response.primaryAgent || response.agentType, response.knowledgeUsed ? 'RAG' : '', response.escalated ? '转人工' : ''].filter(Boolean).join(' · ')
-    messages.value.push({ id: createMessageId(), role: 'assistant', content: response.response, meta, trace: lastTrace.value?.trace || null })
-    await loadMonitor()
+    const messageId = createMessageId()
+    messages.value.push({ id: messageId, role: 'assistant', content: response.response, meta, trace: null })
+    // 回复立即展示；补充信息独立加载，也不阻塞下一轮发送。
+    void loadToolTrace(response.requestId).then((trace) => {
+      const item = messages.value.find((entry) => entry.id === messageId)
+      if (item) item.trace = trace?.trace || null
+      if (item && lastResponse.value?.requestId === response.requestId) lastTrace.value = trace
+    })
+    void loadMonitor()
   } catch (error) {
     statusText.value = error.message
     statusOpen.value = true

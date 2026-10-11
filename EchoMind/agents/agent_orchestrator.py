@@ -333,6 +333,7 @@ class BaseAgent:
                         "input": dict(args),
                         "success": call_success,
                         "result_success": result_success,
+                        "knowledge_hit": bool(result.get("knowledge_hit")) if isinstance(result, dict) else False,
                         "latency_ms": round(tool_latency_ms, 1),
                         "cached": bool(result.get("cached")) if isinstance(result, dict) else False,
                         "reranked": bool(result.get("reranked")) if isinstance(result, dict) else False,
@@ -761,6 +762,7 @@ class AgentOrchestrator:
         if req.intent is None:
             intent_result = await self._intent_recognizer.recognize(req.message, history=req.history)
             req.intent  = intent_result.intent
+            req.entities = intent_result.entities
             req.intent_group = intent_result.intent_group
             req.urgency = intent_result.urgency
             req.intent_confidence = intent_result.confidence

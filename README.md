@@ -14,7 +14,7 @@
 
 <br><br>
 
-<img src="https://img.shields.io/badge/测试-23%20passed%20%2F%202%20skipped-2EA043?style=flat-square" alt="测试状态">
+<img src="https://img.shields.io/badge/测试-44%20passed-2EA043?style=flat-square" alt="测试状态">
 <img src="https://img.shields.io/badge/架构-多%20Agent%20%2B%20RAG%20%2B%20MCP-1F6FEB?style=flat-square" alt="架构">
 <img src="https://img.shields.io/badge/仓库-统一单仓库-8250DF?style=flat-square" alt="统一单仓库">
 
@@ -112,7 +112,7 @@ pip install -r requirements-dev.txt
 pytest tests/ -v          # 回归测试用假 LLM + 假 ChromaDB，不访问外部服务
 ```
 
-- `test_knowledge_base.py` / `test_conversation_memory.py` 依赖 `chromadb` 顶层导入；本机未装时会自动跳过（Windows 上 `chroma-hnswlib` 无预编译 wheel，Docker 镜像内不受影响）。
+- 记忆与知识库在实例初始化时才加载 `chromadb`。离线回归测试使用假存储、假 LLM，可在未安装 ChromaDB 时执行；实际启动仍需完整运行依赖。Windows 的 ChromaDB 原生依赖安装有困难时，建议使用 Docker。
 - CLI 调试模式（需本机 Redis 和 API Key）：`python -m api.main --cli`
 
 ### 前端（Node 22）
@@ -143,7 +143,7 @@ EchoMind/
 │   ├── monitor/                #   性能监控 + Prometheus + 异常检测
 │   ├── evaluation/             #   LLM-as-Judge 评测
 │   ├── skills/                 #   可被热加载的技能包
-│   ├── tests/                  #   23 passed / 2 skipped
+│   ├── tests/                  #   44 passed（离线回归）
 │   └── wiki/                   #   全套技术文档 + 架构图
 ├── EchoMindFrontend/           # 前端：Vue 3 + Vite 调试界面（4 个源文件）
 │   └── src/                    #   App.vue / lib/api.js / styles.css / main.js
@@ -194,7 +194,7 @@ EchoMind/
 - **历史备份**：子仓库合并前的 `.git` 备份在 `D:/git_repository/_EchoMind_subgit_backup_20260928/`；再早的原作者提交历史备份在 `D:/git_repository/_EchoMind_git_backup_20260927/`。确认无用后可删。
 - **本机环境需重建**：`node_modules`、`dist`、`.idea`、`.venv` 等环境/产物文件已清理，未纳入版本库。按上文「本地开发」重建即可（`npm install` / `pip install -r requirements-dev.txt`）。原作者的 macOS 残留环境（`darwin-arm64` 版 `node_modules`、`.DS_Store`）已于 2026-09-27 清理。
 - **已知限制**：管理接口无鉴权；Redis 默认密码 `echomind123` 为演示值，公网部署请修改 `.env` 中的 `REDIS_PASSWORD`；`chromadb` 在 Windows 上无预编译 wheel（Docker 内不受影响）；两套 compose 不可同时启动。
-- `.env`、`data/`、`node_modules/` 等运行环境从未纳入版本库（仓库不携带 ignore 规则文件，提交时请勿使用 `git add .`，逐个文件添加即可）；请勿将真实 Key 提交到任何公开仓库。
+- 根目录 `.gitignore` 统一忽略 `.env`、`data/`、`node_modules/` 等运行环境；提交前检查暂存内容，避免将真实 Key 提交到公开仓库。
 
 ---
 
@@ -203,3 +203,15 @@ EchoMind/
 **EchoMind** — 可观测、可评测、可降级的多 Agent 客服运行时。
 
 </div>
+
+## 学习体验修正（2026-10-11）
+
+- 聊天回复立即显示，工具 Trace 与监控随后补充，不再延迟显示答案。
+- 记忆检索使用 ChromaDB 的 `$and` 条件；压缩保持消息时序，保留摘要期间的新消息。
+- `knowledge_used` 只表示真实片段命中，检索降级不再当成知识依据。
+- `/metrics` 默认即可获取业务指标：`requests_total{status}` 统计聊天轮次（含对话评测），`chat_latency_ms` 记录逐轮全链路耗时，`agent_avg_latency_ms` 展示累计均值。
+- 网页启动的对话评测复用聊天路径，默认使用每次独立的评测用户/会话；直接构造评测器仍可选择仅评测编排器。
+- JSON 上传逐项校验，超大文件、错误编码及格式错误给出明确提示；知识导入后清理旧检索缓存。
+- Compose 使用 Python 健康检查；代理读取超时为 180 秒，上传请求体上限为 11 MiB（包含 multipart 开销），实际文件上限仍为 10 MiB。
+
+这些验证使用假 LLM 和假存储，证明业务逻辑正确；真实模型、存储服务及容器启动仍需在相应环境验证。

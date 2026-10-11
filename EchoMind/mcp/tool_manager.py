@@ -437,6 +437,12 @@ class MCPToolManager:
 
     # ── 缓存 ──────────────────────────────────────────────────────────────────
 
+    def invalidate_cache(self, name: str) -> None:
+        """知识更新后清理该工具的旧召回，不影响其它工具。"""
+        for key in list(self._cache):
+            if key.startswith(f"{name}:"):
+                del self._cache[key]
+
     def _cache_key(self, name: str, params: Dict, rerank_top_k: int = 0) -> str:
         payload = {"params": params, "rerank_top_k": rerank_top_k}
         return f"{name}:{hashlib.md5(json.dumps(payload, sort_keys=True).encode()).hexdigest()}"

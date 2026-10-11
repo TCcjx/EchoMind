@@ -200,17 +200,20 @@ def build_shared_rag_tools(tool_manager: Any) -> Dict[str, AgentToolSpec]:
             }
 
         fallback_used = bool(getattr(result, "fallback_used", False))
+        hits = [item for item in (result.data or [])
+                if isinstance(item, dict) and not item.get("fallback") and item.get("content", "").strip()]
         payload = {
-            "success": True,
+            "success": bool(hits),
+            "knowledge_hit": bool(hits),
             "query": query,
             "top_k": top_k,
-            "results": result.data,
+            "results": hits,
             "reranked": bool(getattr(result, "reranked", False)),
             "fallback_used": fallback_used,
         }
         if fallback_used:
             # 让模型知道这不是真实召回，避免把降级话术当成知识库依据引用。
-            payload["warning"] = "知识库检索不可用，results 是降级提示内容，不能作为事实依据引用。"
+            payload["warning"] = "部分检索发生降级；仅返回成功召回的真实片段，空结果不能作为事实依据。"
         return payload
 
     return {
